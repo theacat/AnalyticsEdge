@@ -21,10 +21,12 @@ WHO$Country[maxCol]
 plot(WHO$GNI, WHO$FertilityRate)
 Outliers = subset(WHO,GNI>10000 & FertilityRate > 2.5)
 nrow(Outliers)
-#找出 Outliers 
+#找出 Outliers , 离群值（mild Outliers）和极限离群值（extreme Outliers）
+# http://blog.csdn.net/jia20003/article/details/6382347 有 boxplot 的介紹!
+# Outlier:IQR= Q3-Q1 , outlier 就是 Q3+1.5IQR or Q1-1.5IQR
 Outliers[c("Country", "GNI","FertilityRate")]
 hist(WHO$CellularSubscribers)
-###boxplot 中間黑線是median, box 是1st~3rd 分衛，曲線叫 whisters 秀出最大與最小值。小圓圈是 outlier 
+###boxplot 中間黑線是median, box 是1st~3rd 分衛，曲線叫 whisters 秀出最大分衛與最小值分衛。小圓圈是 outlier 
 boxplot(WHO$LifeExpectancy~WHO$Region)
 boxplot(WHO$LifeExpectancy~WHO$Region,xlab="",ylab="LifeExpectancy", main="Life LifeExpectancies of Countires by Region")
 table(WHO$Region)
