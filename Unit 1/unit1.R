@@ -37,5 +37,36 @@ tapply(WHO$LiteracyRate, WHO$Region, min)
 ### 把 NA 值去掉
 tapply(WHO$LiteracyRate, WHO$Region, min,na.rm=TRUE)
 
+#####################################
+## Understanding Food: Nutritional Education with Data (Recitation) 
+####################################
+#先把上個 section 的 variable 清掉
+rm(list=ls()) 
+### Prelog 
+# 1990 US 14% Obesity, 2000 20% 2010 > 20% ,35% 過胖, USDA 提供了Nutrition 的Database 給使用者
+
+USDA <- read.csv("USDA.csv")
+str(USDA)
+## ID Unique# of food .... 
+summary(USDA)
+### 從 Summary 裡發現 Sodium Max 有夠高, 所以來看看這個Item 
+USDA$Sodium
+maxSod <- which.max(USDA$Sodium)
+minSod
+names(USDA) #叫出 variable name 
+USDA$Description[maxSod]
+HighSodium <- subset(USDA, Sodium > 10000)
+nrow(HighSodium) # 幾行 
+HighSodium$Description
+match("CAVIAR", USDA$Description) 
+USDA$Sodium[4154]
+USDA$Sodium[match("CAVIAR", USDA$Description)] ## 這麼寫也可以! *這樣才CS嘛!
+summary(USDA$Sodium)## Min 1st Qu, median mean 3rd Qu max NAs , 沒有 Standard deviation
+sd(USDA$Sodium) ## Return NA, 所以要把 NA 拿掉
+sd(USDA$Sodium, na.rm=TRUE) # 把 NA 拿掉
+plot(USDA$Protien, USDA$TotalFat)
+
+
+
 
 
