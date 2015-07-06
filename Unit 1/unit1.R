@@ -1,3 +1,4 @@
+### USE UTF-8 Encoding To See Chinese
 ###Video4 
 WHO <- read.csv("WHO.csv")
 str(WHO)
@@ -65,6 +66,55 @@ summary(USDA$Sodium)## Min 1st Qu, median mean 3rd Qu max NAs , 沒有 Standard 
 sd(USDA$Sodium) ## Return NA, 所以要把 NA 拿掉
 sd(USDA$Sodium, na.rm=TRUE) # 把 NA 拿掉
 plot(USDA$Protien, USDA$TotalFat)
+plot(USDA$VitaminC) #Self add , take a look of VitaminC Level
+hist(USDA$VitaminC, xlab="Vitamin C (mg)", ylab="Histogram of Vitamin C levels")
+## 畫 0-100 mg VitaminC, 因為大部分分布在這 
+hist(USDA$VitaminC, xlab="Vitamin C (mg)", ylab="Histogram of Vitamin C levels", xlim=c(0,100))
+## 因為上面只出現一個大 Cell, 所以, 要把她 break 成 100 cells
+## 可是圖紙有出現五格, 預期 100 cell 這是因為，原來x到 2000 , 2000/100 =20 , 1cell =20mg
+## 100 mg 就五格
+hist(USDA$VitaminC, xlab="Vitamin C (mg)", ylab="Histogram of Vitamin C levels", xlim=c(0,100), breaks=100)
+##但其實我們要看 100 格 , 所以做 2000 breaks
+hist(USDA$VitaminC, xlab="Vitamin C (mg)", ylab="Histogram of Vitamin C levels", xlim=c(0,100), breaks=2000)
+## Box plot , 很多 Outlier
+boxplot(USDA$Sugar, main="Boxplot of sugar levels", ylab="Sugar(g)")
+
+###############################
+##  VIDEO 5: ADDING VARIABLES
+###############################
+## 加欄 if sodium > average => 1 sodium < average =>0 
+USDA$Sodium[1] > mean(USDA$Sodium, na.rm=TRUE) # Take a look
+USDA$Sodium[50] > mean(USDA$Sodium, na.rm=TRUE) # Take a look
+HighSodium <- USDA$Sodium > mean(USDA$Sodium, na.rm=TRUE)
+str(HighSodium) #注意輸出 是 logi (TRUE/FALSE), 但我們要的是 0 or 1
+## 所以要把output 轉成 numeric
+HighSodium <- as.numeric(USDA$Sodium > mean(USDA$Sodium, na.rm=TRUE))
+str(HighSodium)
+## 加進 DataFrame
+USDA$HighSodium <- as.numeric(USDA$Sodium > mean(USDA$Sodium, na.rm=TRUE))
+str(HighSodium)
+## 檢查看有沒有加進去
+names(USDA)
+USDA$HighProtien <- as.numeric(USDA$Protein > mean(USDA$Protein, na.rm=TRUE))
+USDA$HighFat <- as.numeric(USDA$TotalFat > mean(USDA$TotalFat, na.rm=TRUE))
+USDA$HighCarbs <- as.numeric(USDA$Carbohydrate > mean(USDA$Carbohydrate, na.rm=TRUE))
+names(USDA)
+str(USDA)
+##################
+## Video6 : SUMMARY TABLES
+################
+table(USDA$HighSodium)
+# 兩個 變數, Upper Lable HighSodium, Left label 是 HighFat , 這會給 4 個值
+# (0,0)低鹽低油 (0,1) 高鹽低油 .... etc 
+table(USDA$HighSodium, USDA$HighFat)
+## 接下來要找，Average amount of iron sorted by high low protien
+## 要用到 tapply, tapply(arg1, arg2, arg3) arg1依據arg2做出一個Group, 然後丟到 arg3 
+tapply(USDA$Iron, USDA$HighProtien,mean, na.rm=TRUE) 
+##結果: 因為HighProtien 是 0, 1 所以分兩Group , each group 再去做 mean 所以結果是 2 個值
+tapply(USDA$VitaminC, USDA$HighCarbs, max, na.rm=TRUE)
+### 結果顯示出HighCarbs 有 VitaminC , 真的是這樣嗎? 可以用 Summary 看究竟! 
+tapply(USDA$VitaminC, USDA$HighCarbs, summary, na.rm=TRUE)
+
 
 
 
