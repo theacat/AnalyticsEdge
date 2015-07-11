@@ -1,0 +1,6 @@
+climate = read.csv("climate_change.csv")
+trainingset = subset(climate, Year <  2007 )
+testingset = subset(climate, Year > 2006 )
+climateLM = lm(Temp ~ MEI+ CO2+ CH4+ N2O+ CFC.11+ CFC.12+ TSI+ Aerosols , data = trainingset)
+summary(climateLM)
+StepModel = step(climateLM)
